@@ -1,0 +1,62 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Tue Sep 17 15:39:14 2019
+Computes the wavelet spectrum (wavelet variance v. scale) of path over specified scales using the Mexican hat wavelet.  Note that the edge effects increase with scale, so Vcwt at larger scales become's increasingly biased towards nodes in the center of the patch.
+
+Inputs: 
+    Patch = partch of digital elevation model
+scales = wavelet scales over which the Vcwt is computer
+dx = grid spacing
+
+Outputs:
+    Vcwt = vector of wavelet variance computer at each scale
+    frq = vector of frequences
+    wave = vector of wavelengths
+    
+    
+@author: matthewmorriss written 9/17/19
+"""
+
+def conv2_mexh_var(patch, scales dx):
+    
+    import progress
+    import numpy as np
+    
+    patch[patch == -32767] =np.nan
+    [nrows, ncols] = np.shape(patch)
+    nodes = nrows * ncols
+    
+    #Normalize patch to have unit variance
+    patch = patch/np.nanstd(patch)
+    
+    #initialize the output vectors:
+    Vcwt = np.zeros((1,np.size(scales)))
+    
+    #Determine extent of edge effecst at largest wavelt scale sampled. NaN values will be assigned to the fringe of each C grid in the loop so that the same number of nodes are used at each scale for determining Vcwt:
+    fringeEval = np.ceil(4*np.max(scales))
+    
+    
+    #start counter
+    k = 0
+    for a = (scales):
+        progress.progress(a,np.size(scales)),'Doing long job')
+        
+        #update counter
+        k = k +1
+        
+        #Compute the 2D CWT by calling Conv2_mexh function (below)
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    return(Vcwt,frq,wave)
+
+def conv2_mexh(patch,a,dx):
+    
+    
+    return(C)
