@@ -17,11 +17,13 @@ Outputs:
 @author: matthewmorriss written 9/17/19
 """
 
-def conv2_mexh_var(patch, scales dx):
+def conv2_mexh_var(patch, scales, dx):
     
     import progress
     import numpy as np
-    
+    from conv2_mexh import conv2_mexh
+
+    patch[patch == -9999.0] = np.nan
     patch[patch == -32767] =np.nan
     [nrows, ncols] = np.shape(patch)
     nodes = nrows * ncols
@@ -38,25 +40,32 @@ def conv2_mexh_var(patch, scales dx):
     
     #start counter
     k = 0
-    for a = (scales):
-        progress.progress(a,np.size(scales)),'Doing long job')
+    for a in scales:
+        progress.progress(a,np.max(scales),'Doing long job')
         
         #update counter
-        k = k +1
+       
         
         #Compute the 2D CWT by calling Conv2_mexh function (below)
+        C = conv2_mexh(patch,a,dx)
+        
+        # Mask edge effects with naN (no Data)
+        C[(np.arange(0,fringeEval)).astype(int),:] = np.NaN
+        C[:,(np.arange(0,fringeEval)).astype(int)] = np.NaN
+        C[np.arange((nrows-fringeEval),nrows).astype(int),:] = np.NaN
+        C[:,(np.arange(ncols-fringeEval,ncols)).astype(int)] = np.NaN
     
-    
-    
-    
-    
-    
-    
-    
+        #find NaNs and replace with 0        
+        ind = np.argwhere(np.isnan(C))
+        C[np.isnan(C)] = 0
+        
+        #now calculate the wavelet variance at current scale, using number of real-valued nodes
+        Vcwt[0,k] = 1/(2*(nodes - ind.shape[0]))*np.sum(np.sum(C**2,1),0)
+        
+        #frequency and wavelegth vectors
+        wave = 2*np.pi*dx*scales/(5/2)**(1/2)
+        frq = 1/wave
+        k = k +1
     
     return(Vcwt,frq,wave)
 
-def conv2_mexh(patch,a,dx):
-    
-    
-    return(C)

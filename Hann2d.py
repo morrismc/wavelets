@@ -23,8 +23,9 @@ def Hann2D(win):
     r = np.sqrt((Y-b)**(2) + (X-a)**2) # radial polar coords
     rprime = np.sqrt((a**2)*(b**2)*(b**2*(np.cos(theta))**2 +
                       a**2*np.sin(theta)**2)**(-1))
+    
     hanncoeff = (r < rprime) * (0.5*(1+np.cos(np.pi*r/(rprime))))                 
     H = win* hanncoeff
     Wss = np.sum(hanncoeff**2)
     
-    return(H)
+    return(H, Wss)
