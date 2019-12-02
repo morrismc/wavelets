@@ -23,8 +23,9 @@ def conv2_mexh_var(patch, scales, dx):
     import numpy as np
     from conv2_mexh import conv2_mexh
 
-    patch[patch == -9999.0] = np.nan
-    patch[patch == -32767] =np.nan
+    patch[patch == -9999.0] = 0
+    patch[patch == -32767] = 0
+    patch[np.isnan(patch)] = 0
     [nrows, ncols] = np.shape(patch)
     nodes = nrows * ncols
     
